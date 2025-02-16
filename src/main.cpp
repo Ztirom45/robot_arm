@@ -89,16 +89,20 @@ float J2(float H,float Z){
 Servo j1;
 Servo j2;
 Servo j3;
+Servo gripper;
 
 void setup() {
     Serial.begin(9600);
     j1.attach(6);
     j2.attach(5);
     j3.attach(3);
+    gripper.attach(9);
     j1.write(90);
     j2.write(90);
     j3.write(90);
+    gripper.write(0);
     delay(2000);
+    gripper.write(30);
 }
 
 void set_arm(float x,float y, float z){
