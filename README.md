@@ -11,7 +11,7 @@ a robotic arm with fancy contoroll options
     - angle_y > 360: remove positon from motion_stack
 - [ ] run()
     - executes motion_stack from motion_stack[0] to motions_stack[n]
-- [] stop()
+- [ ] stop()
     - breacks run()
 - [ ] get()
     - returns
