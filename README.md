@@ -2,7 +2,7 @@
 a robotic arm with fancy contoroll options
 
 ## features
-- inverse cinematics postion setting
+### inverse cinematics postion setting
 ### TODO save postions and move to them
 #### commands:
 - [ ] set(int angle_x,int angle_y, int angle_z, gripper,position)
