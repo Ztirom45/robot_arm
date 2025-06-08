@@ -4,10 +4,12 @@ make sure to install the right lib:
 arduino-libraries/Servo@^1.2.2
 */
 
+#include "HardwareSerial.h"
 #include <Arduino.h>
 #include <Servo.h>
 #include <inverse_kinematics.hpp>
 #include <log.hpp>
+#include <commands.hpp>
 
 Servo j1;
 Servo j2;
@@ -19,6 +21,10 @@ Still work in progress
 not reverseble
 => robot can't get controll easely back
 */
+
+
+String recived;
+
 void enable_user_depositioning(){
     j1.detach();
     j2.detach();
@@ -70,22 +76,18 @@ void move_arm(float x, float y, float z){
     mylogln(" ");
 }
 
+String read_message(){
+	if(Serial.available()<=0){
+
+	  return "";
+	}
+	recived = Serial.readString();
+        mylogln(recived);
+	return recived;
+}
+
 void loop() {
-    /*
-    set_arm(0,2*4.9,0);
-    set_arm(0,4.9,-4.9);
-    set_arm(0,0,2*4.9);
-    set_arm(0,-2*4.9,0);
-    set_arm(0,-4.9,-4.9);
-    */
-    /*
-    move_arm(5,5,0);
-    move_arm(-5,5,0);
-    move_arm(-5,-5,0);
-    move_arm(5,-5,0);
-    */
-    //move_arm(0,17.9,0);
-    //move_arm(0,0,17.9);
-    //move_arm(17.9,0,0);
+    String action = read_message();
+    parse_and_execute_action(action);
 }
 
