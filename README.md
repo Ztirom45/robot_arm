@@ -2,9 +2,9 @@
 a robotic arm with fancy contoroll options
 
 ## features
-### inverse cinematics postion setting
+### - inverse cinematics postion setting
 
-### save postions and move to them
+### - save postions and move to them
 #### about commands 🖥️⟶ 🖥️:
 - **IMPORTANT:** the whole string part can't longer than `MAX_COMMAND_LEN` (50 chars)
 - at the moment only posible with copy paste a command into pio monitor
@@ -29,5 +29,5 @@ a robotic arm with fancy contoroll options
         - [ ] max_len(motion_stak)
         - [ ] speed
 
-### TODO frontend ui for commands
+### - TODO frontend ui for commands
 
