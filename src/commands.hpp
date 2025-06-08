@@ -18,6 +18,7 @@ struct Command{
 	void (*setup)(Vector<String>,Command*);
 	void (*loop)(Command*);
 	int speed;//for looped motor functions
+	Vector<int[4]> stack;
 	Command(
 		String command,
 		void (*setup)(Vector<String>,Command*),

@@ -8,7 +8,7 @@ Important: parse_and_excute returns params in reverse order
 Command::Command(String command,
 		void (*setup)(Vector<String>,Command*),
 		void (*loop)(Command*)
-):command(command),setup(setup),loop(loop),speed(0){
+):command(command),setup(setup),loop(loop),speed(0),stack(Vector.new()){
 
 }
 
@@ -25,16 +25,39 @@ bool check_params(String function_name,size_t number_of_params_wanted,size_t num
 	}
 	return false;
 }
+enum Action{
+  replace_with_input,
+  add_with_input,
+  add_with_orientation,
+  replace_with_orientation,
+  remove_it
+};
 
 void add_setup(Vector<String> args,Command *command){
-      if(check_params("add(angle_x,angle_y,angle_z,gripper,position)", 5, args.size())){
+      if(check_params("add(angle_x,angle_y,angle_z,gripper,position)", 6, args.size())){
 	return;
       }
-      int16_t angle_x = args[4].toInt();
-      int16_t angle_y = args[3].toInt();
-      int16_t angle_z = args[2].toInt();
-      int16_t gripper = args[1].toInt();
-      int16_t position = args[0].toInt();
+      int16_t angle_x = args[5].toInt();
+      int16_t angle_y = args[4].toInt();
+      int16_t angle_z = args[3].toInt();
+      int16_t gripper = args[2].toInt();
+      uint16_t position = (uint16_t)args[1].toInt();
+      Action action = (uint16_t)args[0].toInt();
+      if(action == replace_with_input){
+	mylogln("replace_with_input");
+      }
+      if(action == add_with_input){
+	mylogln("add_with_input");
+      }
+      if(action == add_with_orientation){
+	mylogln("add_with_orientation");
+      }
+      if(action == replace_with_orientation){
+	mylogln("replace_with_orientation");
+      }
+      if(action == remove_it){
+	mylogln("remove_it");
+      }
       mylog("add pos with params:");
       mylog(angle_x);mylog(", ");
       mylog(angle_y);mylog(", ");
