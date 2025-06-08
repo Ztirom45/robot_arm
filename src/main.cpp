@@ -7,7 +7,7 @@ arduino-libraries/Servo@^1.2.2
 #include <Arduino.h>
 #include <Servo.h>
 #include <inverse_kinematics.hpp>
-
+#include <log.hpp>
 
 Servo j1;
 Servo j2;
@@ -35,6 +35,7 @@ void setup() {
     j1.write(90);
     j2.write(90);
     j3.write(90);
+    delay(500);
     gripper.write(0);
     delay(2000);
     gripper.write(180); 
@@ -49,11 +50,11 @@ void set_arm(float x,float y, float z){
     j1.write(j1_a);
     j2.write(j2_a);
     j3.write(j3_a);
-    Serial.print(j1_a);
-    Serial.print(", ");
-    Serial.print(j2_a);
-    Serial.print(", ");
-    Serial.println(j3_a);
+    mylog(j1_a);
+    mylog(", ");
+    mylog(j2_a);
+    mylog(", ");
+    mylogln(j3_a);
 }
 
 void move_arm(float x, float y, float z){
@@ -62,11 +63,11 @@ void move_arm(float x, float y, float z){
     float a_j1 = degree_2_radian(j1.read());
     float a_j2 = degree_2_radian(j2.read());
     float a_j3 = degree_2_radian(j3.read());
-    Serial.print("set to ");
-    Serial.print(a_j1);Serial.print(" ");
-    Serial.print(a_j2);Serial.print(" ");
-    Serial.print(a_j3);Serial.print(" ");
-    Serial.println(" ");
+    mylog("set to ");
+    mylog(a_j1);Serial.print(" ");
+    mylog(a_j2);Serial.print(" ");
+    mylog(a_j3);Serial.print(" ");
+    mylogln(" ");
 }
 
 void loop() {
