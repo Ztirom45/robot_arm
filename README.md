@@ -32,3 +32,9 @@ a robotic arm with fancy contoroll options
 
 ### - TODO frontend ui for commands
 
+
+## Hardware:
+- basic 9g servos like the SG92R
+- The Servos are moded to read position as it can be seen here:
+    - https://www.youtube.com/watch?v=S7aVcis3ntk
+    - https://www.instructables.com/Servo-Feedback-Hack-free/
