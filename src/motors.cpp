@@ -1,18 +1,35 @@
+/*
+TODO fix depositioning
+*/
 #include <motors.hpp>
 void enable_user_depositioning(){
+    if(user_depositioning_enabled){
+      return;
+    }
     j1.detach();
     j2.detach();
     j3.detach();
     gripper.detach();
+    user_depositioning_enabled = true;
 }
-
-void setup_motors(){
-    j1.attach(6);
+void disable_user_depositioning(){
+  if(!user_depositioning_enabled){
+    return;
+  }
+  j1.attach(6);
     j2.attach(5);
     j3.attach(3);
     gripper.attach(9);
+    user_depositioning_enabled = false;
+
+}
+
+void setup_motors(){
+    disable_user_depositioning();
     j1.write(90);
+    delay(500);
     j2.write(90);
+    delay(500);
     j3.write(90);
     delay(500);
     gripper.write(0);
@@ -51,7 +68,23 @@ void set_arm(float x,float y, float z){
     mylogln(j3_a);
 }
 
+
+Motion get_arm_position(){
+  bool depositioning = user_depositioning_enabled;
+  disable_user_depositioning();
+  return Motion{
+    j1.read(),
+    j2.read(),
+    j3.read(),
+    gripper.read()
+  };
+  if(depositioning){
+    enable_user_depositioning();
+  }
+}
+
 Servo j1;
 Servo j2;
 Servo j3;
 Servo gripper;
+bool user_depositioning_enabled = true;
