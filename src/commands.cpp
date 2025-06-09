@@ -15,7 +15,7 @@ Vector<Motion> motion_stack(motions_storage_array);
 Command::Command(String command,
 		void (*setup)(Vector<String>,Command*),
 		void (*loop)(Command*)
-):command(command),setup(setup),loop(loop),speed(speed){
+):command(command),setup(setup),loop(loop),speed(10){
 
 }
 
