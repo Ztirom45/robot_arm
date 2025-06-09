@@ -1,8 +1,10 @@
 /*
 TODO fix depositioning
 */
+#include "log.hpp"
 #include <motors.hpp>
-void enable_user_depositioning(){
+void enable_user_depositioning(){ 
+    mylogln((int)user_depositioning_enabled);
     if(user_depositioning_enabled){
       return;
     }
@@ -16,11 +18,11 @@ void disable_user_depositioning(){
   if(!user_depositioning_enabled){
     return;
   }
-  j1.attach(6);
-    j2.attach(5);
-    j3.attach(3);
-    gripper.attach(9);
-    user_depositioning_enabled = false;
+  j1.attach(6);  
+  j2.attach(5);
+  j3.attach(3);
+  gripper.attach(9);
+  user_depositioning_enabled = false;
 
 }
 
@@ -69,18 +71,22 @@ void set_arm(float x,float y, float z){
 }
 
 
-Motion get_arm_position(){
+Motion get_arm_position(){ 
   bool depositioning = user_depositioning_enabled;
   disable_user_depositioning();
-  return Motion{
+  Motion arm_position = Motion{
     j1.read(),
     j2.read(),
     j3.read(),
     gripper.read()
   };
+  mylog("da: ");
+  mylogln(user_depositioning_enabled);
+
   if(depositioning){
     enable_user_depositioning();
   }
+  return arm_position;
 }
 
 Servo j1;

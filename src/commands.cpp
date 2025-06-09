@@ -1,4 +1,5 @@
 #include "log.hpp"
+#include "motors.hpp"
 #include <commands.hpp>
 
 /*
@@ -52,6 +53,7 @@ void add_setup(Vector<String> args,Command *command){
       };
       uint16_t position = (uint16_t)args[1].toInt();
       Action action = (Action)args[0].toInt();
+      
       if(action == replace_with_input){
 	if(position < motion_stack.size()){
 	mylogln("replace_with_input");
@@ -59,27 +61,34 @@ void add_setup(Vector<String> args,Command *command){
 	}else{
 	  mylogln("replacing not posible given position is not in stack");
 	}
+	return;
       }
       if(action == add_with_input){
 	mylog("add_with_input len:");
 	motion_stack.push_back(input_motion);
 	mylogln(motion_stack.size());
+	return;
       }
       if(action == add_with_orientation){
 	mylogln("add_with_orientation");
+	motion_stack.push_back(get_arm_position());
+	mylogln(motion_stack.size());
+	return;
       }
       if(action == replace_with_orientation){
+	if(position < motion_stack.size()){	
 	mylogln("replace_with_orientation");
+	  motion_stack.at(position) = get_arm_position();
+	}else{
+	  mylogln("replacing not posible given position is not in stack");
+	}
+	return;
       }
       if(action == remove_it){
 	mylogln("remove_it");
+	motion_stack.remove(position);
+	return;
       }
-      mylog("add pos with params:");
-      mylog(input_motion.angle_x);mylog(", ");
-      mylog(input_motion.angle_y);mylog(", ");
-      mylog(input_motion.angle_z);mylog(", ");
-      mylog(input_motion.gripper);mylog(", ");
-      mylogln(position);
 }
 void add_loop(Command *command){}
 
