@@ -11,14 +11,21 @@ TODO smartpointer
 #include <Vector.h>
 
 #define MAX_COMMAND_LEN 50
+#define MAX_NUMBER_OF_MOTIONS 10
+#define COMMAND_COUNT 2
 
+struct Motion{
+	int16_t angle_x;
+	int16_t angle_y;
+	int16_t angle_z;
+	int16_t gripper;
+};
 
 struct Command{
 	String command;
 	void (*setup)(Vector<String>,Command*);
 	void (*loop)(Command*);
 	int speed;//for looped motor functions
-	Vector<int[4]> stack;
 	Command(
 		String command,
 		void (*setup)(Vector<String>,Command*),
@@ -32,7 +39,6 @@ void init_commands();
 void add_setup(Vector<String> args,Command *command);
 void add_loop(Command *command);
 
-#define COMMAND_COUNT 1
 
 extern Command commands[COMMAND_COUNT];
 

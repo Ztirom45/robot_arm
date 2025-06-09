@@ -5,10 +5,17 @@
 Important: parse_and_excute returns params in reverse order
 */
 
+size_t current_command = 0;
+String args_storage_array[MAX_COMMAND_LEN];
+Motion motions_storage_array[MAX_NUMBER_OF_MOTIONS];
+Vector<String> args(args_storage_array);
+Vector<Motion> motion_stack(motions_storage_array);
+
+
 Command::Command(String command,
 		void (*setup)(Vector<String>,Command*),
 		void (*loop)(Command*)
-):command(command),setup(setup),loop(loop),speed(0),stack(Vector.new()){
+):command(command),setup(setup),loop(loop),speed(speed){
 
 }
 
@@ -37,17 +44,26 @@ void add_setup(Vector<String> args,Command *command){
       if(check_params("add(angle_x,angle_y,angle_z,gripper,position)", 6, args.size())){
 	return;
       }
-      int16_t angle_x = args[5].toInt();
-      int16_t angle_y = args[4].toInt();
-      int16_t angle_z = args[3].toInt();
-      int16_t gripper = args[2].toInt();
+      Motion input_motion = Motion{
+	  (int16_t)args[5].toInt(),//angle_x
+	  (int16_t)args[4].toInt(),//angle_y
+	  (int16_t)args[3].toInt(),//angle_z
+	  (int16_t)args[2].toInt()//gripper
+      };
       uint16_t position = (uint16_t)args[1].toInt();
-      Action action = (uint16_t)args[0].toInt();
+      Action action = (Action)args[0].toInt();
       if(action == replace_with_input){
+	if(position < motion_stack.size()){
 	mylogln("replace_with_input");
+	  motion_stack.at(position) = (input_motion);
+	}else{
+	  mylogln("replacing not posible given position is not in stack");
+	}
       }
       if(action == add_with_input){
-	mylogln("add_with_input");
+	mylog("add_with_input len:");
+	motion_stack.push_back(input_motion);
+	mylogln(motion_stack.size());
       }
       if(action == add_with_orientation){
 	mylogln("add_with_orientation");
@@ -59,23 +75,36 @@ void add_setup(Vector<String> args,Command *command){
 	mylogln("remove_it");
       }
       mylog("add pos with params:");
-      mylog(angle_x);mylog(", ");
-      mylog(angle_y);mylog(", ");
-      mylog(angle_z);mylog(", ");
-      mylog(gripper);mylog(", ");
+      mylog(input_motion.angle_x);mylog(", ");
+      mylog(input_motion.angle_y);mylog(", ");
+      mylog(input_motion.angle_z);mylog(", ");
+      mylog(input_motion.gripper);mylog(", ");
       mylogln(position);
 }
 void add_loop(Command *command){}
 
+void get_setup(Vector<String> args,Command *command){
+      if(check_params("get()", 0, args.size())){
+	return;
+      }
+      mylog("`");
+      for (Motion i : motion_stack) {
+	mylog(i.angle_x);mylog(", ");
+	mylog(i.angle_y);mylog(", ");
+	mylog(i.angle_z);mylog(", ");
+	mylog(i.gripper);mylog(";");
+      }
+      mylog("len:");
+      mylog(motion_stack.size());
+      mylogln("´");
+}
+
+void get_loop(Command *command){}
 
 Command commands[COMMAND_COUNT] ={
 	Command("add",&add_setup,&add_loop),    
+	Command("get",&get_setup,&get_loop),    
 };
-
-size_t current_command = 0;
-String storage_array[MAX_COMMAND_LEN];
-Vector<String> args(storage_array);
-
 void parse_and_execute_action(String action){
   if(action==""){//string is empty
       commands[current_command].loop(&commands[current_command]);
