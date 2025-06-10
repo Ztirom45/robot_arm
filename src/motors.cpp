@@ -84,8 +84,9 @@ Motion get_arm_position(){
   return arm_position;
 }
 
-int FeedbackServo::read(){
-    return analogRead(this->feedback_pin)/ 1023.0*5.0/3.0*180.0;
+int FeedbackServo::read(){//conversion to voltage devided by PIv (at 180°) multiplied by 180°
+                          //
+    return analogRead(this->feedback_pin)/ 1023.0*5.0/PI*180.0;
 }
 
 FeedbackServo::FeedbackServo(int feedback_pin) : Servo(){
