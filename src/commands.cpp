@@ -16,7 +16,7 @@ Vector<Motion> motion_stack(motions_storage_array);
 Command::Command(String command,
 		void (*setup)(Vector<String>,Command*),
 		void (*loop)(Command*)
-):command(command),setup(setup),loop(loop){
+):command(command),setup(setup),loop(loop),position_goal(Motion{0,0,0,0}){
 
 }
 
@@ -33,6 +33,7 @@ bool check_params(String function_name,size_t number_of_params_wanted,size_t num
 	}
 	return false;
 }
+
 enum Action{
   replace_with_input,
   add_with_input,
@@ -112,10 +113,42 @@ void get_setup(Vector<String> args,Command *command){
 
 void get_loop(Command *command){}
 
+void run_setup(Vector<String> args,Command *command){
+      if(check_params("run()", 0, args.size())){
+	return;
+      }
+      command->position_goal = Motion{
+	  (int16_t)args[5].toInt(),//angle_x
+	  (int16_t)args[4].toInt(),//angle_y
+	  (int16_t)args[3].toInt(),//angle_z
+	  (int16_t)args[2].toInt()//gripper
+      };
+      mylog("running");
+}
+void run_loop(Command *command){
+  mylog(".");
+}
+
+void stop_setup(Vector<String> args,Command *command){
+      if(check_params("stop()", 0, args.size())){
+	return;
+      }
+}
+
+void stop_loop(Command *command){}
+
+
+
 Command commands[COMMAND_COUNT] ={
 	Command("add",&add_setup,&add_loop),    
 	Command("get",&get_setup,&get_loop),    
+	Command("run",&run_setup,&run_loop),    
+	Command("stop",&stop_setup,&stop_loop),    
 };
+
+
+
+
 void parse_and_execute_action(String action){
   if(action==""){//string is empty
       commands[current_command].loop(&commands[current_command]);
