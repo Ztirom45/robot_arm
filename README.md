@@ -10,7 +10,7 @@ a robotic arm with fancy contoroll options
 - at the moment only posible with copy paste a command into pio monitor
 
 - a command is followed by parameters separatet with a space and ends with a \n
-- examples: `add 20 20 30 40 0 3`,`get`
+- examples: `add 20 20 30 40 0 2`,`get`
 
 #### commands list:
 - [x] set(int angle_x,int angle_y, int angle_z, gripper,uint position,unint action)
@@ -23,11 +23,11 @@ a robotic arm with fancy contoroll options
     - executes motion_stack from motion_stack[0] to motions_stack[n]
 - [ ] stop()
     - breacks run()
-- [ ] get()
+- [x] get()
     - returns:
         - [x] motion_stack
         - [x] len(motion_stack)
-        - [ ] max_len(motion_stak)
+        - [x] max_len(motion_stak)
         - [ ] speed
 
 ### - TODO frontend ui for commands

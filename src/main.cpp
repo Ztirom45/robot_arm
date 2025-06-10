@@ -34,10 +34,7 @@ String read_message(){
 }
 
 void loop() {
-   // String action = read_message();
-   // parse_and_execute_action(action);
-   mylog("j1: ");mylog((float)j1.read());
-   mylog(" j2: ");mylog((float)j2.read());
-   mylog(" j3: ");mylogln((float)j3.read());
+    String action = read_message();
+    parse_and_execute_action(action);
 }
 

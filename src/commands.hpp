@@ -25,7 +25,6 @@ struct Command{
 	String command;
 	void (*setup)(Vector<String>,Command*);
 	void (*loop)(Command*);
-	int speed;//for looped motor functions
 	Command(
 		String command,
 		void (*setup)(Vector<String>,Command*),

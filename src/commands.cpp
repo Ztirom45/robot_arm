@@ -16,7 +16,7 @@ Vector<Motion> motion_stack(motions_storage_array);
 Command::Command(String command,
 		void (*setup)(Vector<String>,Command*),
 		void (*loop)(Command*)
-):command(command),setup(setup),loop(loop),speed(10){
+):command(command),setup(setup),loop(loop){
 
 }
 
@@ -103,9 +103,11 @@ void get_setup(Vector<String> args,Command *command){
 	mylog(i.angle_z);mylog(", ");
 	mylog(i.gripper);mylog(";");
       }
-      mylog("len:");
+      mylog("(");
       mylog(motion_stack.size());
-      mylogln("´");
+      mylog(",");
+      mylog(MAX_NUMBER_OF_MOTIONS);
+      mylogln(")´");
 }
 
 void get_loop(Command *command){}
