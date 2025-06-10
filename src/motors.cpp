@@ -1,6 +1,8 @@
 /*
 TODO fix depositioning
 */
+#include "Arduino.h"
+#include "Servo.h"
 #include "log.hpp"
 #include <motors.hpp>
 void enable_user_depositioning(){ 
@@ -72,25 +74,28 @@ void set_arm(float x,float y, float z){
 
 
 Motion get_arm_position(){ 
-  bool depositioning = user_depositioning_enabled;
-  disable_user_depositioning();
   Motion arm_position = Motion{
     j1.read(),
     j2.read(),
     j3.read(),
     gripper.read()
   };
-  mylog("da: ");
-  mylogln(user_depositioning_enabled);
 
-  if(depositioning){
-    enable_user_depositioning();
-  }
   return arm_position;
 }
 
-Servo j1;
-Servo j2;
-Servo j3;
+int FeedbackServo::read(){
+    return analogRead(this->feedback_pin)/ 1023.0*5.0/3.0*180.0;
+}
+
+FeedbackServo::FeedbackServo(int feedback_pin) : Servo(){
+  this->feedback_pin = feedback_pin;
+  pinMode(feedback_pin, INPUT);
+}
+
+
+FeedbackServo j1 = FeedbackServo(A2);
+FeedbackServo j2 = FeedbackServo(A1);
+FeedbackServo j3 = FeedbackServo(A0);
 Servo gripper;
 bool user_depositioning_enabled = true;

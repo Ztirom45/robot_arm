@@ -53,8 +53,8 @@ void add_setup(Vector<String> args,Command *command){
       };
       uint16_t position = (uint16_t)args[1].toInt();
       Action action = (Action)args[0].toInt();
-      
-      if(action == replace_with_input){
+      switch(action){
+       case replace_with_input:
 	if(position < motion_stack.size()){
 	mylogln("replace_with_input");
 	  motion_stack.at(position) = (input_motion);
@@ -62,20 +62,20 @@ void add_setup(Vector<String> args,Command *command){
 	  mylogln("replacing not posible given position is not in stack");
 	}
 	return;
-      }
-      if(action == add_with_input){
+       
+       case add_with_input:
 	mylog("add_with_input len:");
 	motion_stack.push_back(input_motion);
 	mylogln(motion_stack.size());
 	return;
-      }
-      if(action == add_with_orientation){
+      
+       case add_with_orientation:
 	mylogln("add_with_orientation");
 	motion_stack.push_back(get_arm_position());
 	mylogln(motion_stack.size());
 	return;
-      }
-      if(action == replace_with_orientation){
+      
+       case replace_with_orientation:
 	if(position < motion_stack.size()){	
 	mylogln("replace_with_orientation");
 	  motion_stack.at(position) = get_arm_position();
@@ -83,8 +83,8 @@ void add_setup(Vector<String> args,Command *command){
 	  mylogln("replacing not posible given position is not in stack");
 	}
 	return;
-      }
-      if(action == remove_it){
+    
+       case remove_it:
 	mylogln("remove_it");
 	motion_stack.remove(position);
 	return;

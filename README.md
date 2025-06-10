@@ -10,15 +10,15 @@ a robotic arm with fancy contoroll options
 - at the moment only posible with copy paste a command into pio monitor
 
 - a command is followed by parameters separatet with a space and ends with a \n
-- examples: `add 10 20 30 40 0 2`,`get`
+- examples: `add 20 20 30 40 0 3`,`get`
 
 #### commands list:
-- [ ] set(int angle_x,int angle_y, int angle_z, gripper,uint position,unint action)
+- [x] set(int angle_x,int angle_y, int angle_z, gripper,uint position,unint action)
     - [x] action == 0: replace at position with input_motion(angle_x,angle_y,angle_z,gripper)
     - [x] action == 1: add input_motion to top of position_stack
-    - [ ] action == 2: add current robotic arm position at the top of the stack (does not work with the harware)
-    - [ ] action == 3: replace current robotic arm position at given position argument of stack (does not work with the harware)
-    - [ ] action == 4: remove element positon from motion_stack
+    - [x] action == 2: add current robotic arm position at the top of the stack (does not work with the harware)
+    - [x] action == 3: replace current robotic arm position at given position argument of stack (does not work with the harware)
+    - [x] action == 4: remove element positon from motion_stack
 - [ ] run()
     - executes motion_stack from motion_stack[0] to motions_stack[n]
 - [ ] stop()

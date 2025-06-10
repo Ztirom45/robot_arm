@@ -12,9 +12,14 @@ void move_arm(float x, float y, float z);
 void set_arm(float x,float y, float z);
 Motion get_arm_position();
 
+struct FeedbackServo: public Servo{
+	int feedback_pin;
+	int read();
+	FeedbackServo(int);
+};
 
-extern Servo j1;
-extern Servo j2;
-extern Servo j3;
+extern FeedbackServo j1;
+extern FeedbackServo j2;
+extern FeedbackServo j3;
 extern Servo gripper;
 extern bool user_depositioning_enabled;
