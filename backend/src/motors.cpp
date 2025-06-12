@@ -123,12 +123,12 @@ bool move_arm_angle(Motion goal,int speed){//return true if its done
   delay(50);
   return false;
 }
-
+/*
 int FeedbackServo::read(){//conversion to voltage devided by PIv (at 180°) multiplied by 180°
                           //
     return analogRead(this->feedback_pin)/ 1023.0*5.0/PI*180.0;
 }
-
+*/
 FeedbackServo::FeedbackServo(int feedback_pin) : Servo(){
   this->feedback_pin = feedback_pin;
   pinMode(feedback_pin, INPUT);

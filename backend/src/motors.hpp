@@ -16,7 +16,7 @@ bool move_arm_angle(Motion goal,int speed);
 
 struct FeedbackServo: public Servo{
 	int feedback_pin;
-	int read();
+	//int read();
 	FeedbackServo(int);
 };
 
