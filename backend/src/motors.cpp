@@ -3,8 +3,12 @@ TODO fix depositioning
 */
 #include "Arduino.h"
 #include "Servo.h"
+#include "commands.hpp"
 #include "log.hpp"
 #include <motors.hpp>
+
+#define DEGREE_ACURACY 3
+
 void enable_user_depositioning(){ 
     mylogln((int)user_depositioning_enabled);
     if(user_depositioning_enabled){
@@ -30,16 +34,7 @@ void disable_user_depositioning(){
 
 void setup_motors(){
     disable_user_depositioning();
-    j1.write(90);
-    delay(500);
-    j2.write(90);
-    delay(500);
-    j3.write(90);
-    delay(500);
-    gripper.write(0);
-    delay(2000);
-    gripper.write(180); 
-    delay(2000);
+    while(!move_arm_angle(Motion{90,90,90,180}, ANGULAR_VELOCITY)){};
     enable_user_depositioning();
 
 }
@@ -89,6 +84,44 @@ void set_arm_angle(Motion goal){
   j2.write(goal.angle_y);
   j3.write(goal.angle_z);
   gripper.write(goal.gripper);
+}
+
+bool move_arm_angle(Motion goal,int speed){//return true if its done
+  Motion position = get_arm_position();
+  Motion way_to_go = goal-position;
+  Motion step = Motion{
+    way_to_go.angle_x > speed ? speed : (way_to_go.angle_x < -speed ? -speed: way_to_go.angle_x),
+    way_to_go.angle_y > speed ? speed : (way_to_go.angle_y < -speed ? -speed: way_to_go.angle_y),
+    way_to_go.angle_z > speed ? speed : (way_to_go.angle_z < -speed ? -speed: way_to_go.angle_z),
+    way_to_go.gripper > speed ? speed : (way_to_go.gripper < -speed ? -speed: way_to_go.gripper)
+  };
+  mylog(position.angle_x);
+  mylog(", ");
+  mylog(position.angle_y);
+  mylog(", ");
+  mylog(position.angle_z);
+  mylog(":\t");
+  mylog(way_to_go.angle_x);
+  mylog(", ");
+  mylog(way_to_go.angle_y);
+  mylog(", ");
+  mylog(way_to_go.angle_z);
+  mylog(":\t");
+  mylog(step.angle_x);
+  mylog(", ");
+  mylog(step.angle_y);
+  mylog(", ");
+  mylogln(step.angle_z);
+  
+  if(abs(step.angle_x)<min(DEGREE_ACURACY,speed)
+  &&abs(step.angle_y)<min(DEGREE_ACURACY,speed)
+  &&abs(step.angle_z)<min(DEGREE_ACURACY,speed)
+  &&abs(step.gripper)<min(DEGREE_ACURACY,speed)){
+    return true;
+  }
+  set_arm_angle(position+step);
+  delay(50);
+  return false;
 }
 
 int FeedbackServo::read(){//conversion to voltage devided by PIv (at 180°) multiplied by 180°

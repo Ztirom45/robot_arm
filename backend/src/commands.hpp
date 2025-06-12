@@ -13,13 +13,15 @@ TODO smartpointer
 #define MAX_COMMAND_LEN 50
 #define MAX_NUMBER_OF_MOTIONS 10
 #define COMMAND_COUNT 4
-#define ANGULAR_VELOCITY 5//°/s
+#define ANGULAR_VELOCITY 10//°/50ms
 
 struct Motion{
 	int16_t angle_x;
 	int16_t angle_y;
 	int16_t angle_z;
 	int16_t gripper;
+	friend Motion operator + (const Motion m1, const Motion& m2);
+	friend Motion operator - (const Motion m1, const Motion& m2);
 };
 
 struct Command{

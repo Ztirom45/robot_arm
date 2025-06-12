@@ -12,6 +12,7 @@ void move_arm(float x, float y, float z);
 void set_arm(float x,float y, float z);
 Motion get_arm_position();
 void set_arm_angle(Motion goal);
+bool move_arm_angle(Motion goal,int speed);
 
 struct FeedbackServo: public Servo{
 	int feedback_pin;

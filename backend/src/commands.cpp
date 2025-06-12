@@ -34,6 +34,25 @@ bool check_params(String function_name,size_t number_of_params_wanted,size_t num
 	return false;
 }
 
+
+Motion operator + (const Motion m1, const Motion& m2){
+  return Motion{
+    m1.angle_x+m2.angle_x,
+    m1.angle_y+m2.angle_y,
+    m1.angle_z+m2.angle_z,
+    m1.gripper+m2.gripper
+  };
+}
+
+Motion operator - (const Motion m1, const Motion& m2){
+  return Motion{
+    m1.angle_x-m2.angle_x,
+    m1.angle_y-m2.angle_y,
+    m1.angle_z-m2.angle_z,
+    m1.gripper-m2.gripper
+  };
+}
+
 enum Action{
   replace_with_input,
   add_with_input,
@@ -120,9 +139,10 @@ void run_setup(Vector<String> args,Command   *command){
       mylog("running");
       //TODO move to loop
       disable_user_depositioning();
-      for(Motion i:motion_stack){
-	set_arm_angle(i);
-	delay(2000);
+      for(Motion motion:motion_stack){
+	while(!move_arm_angle(motion, ANGULAR_VELOCITY)){
+	}
+	delay(500);
       }
 
 }
