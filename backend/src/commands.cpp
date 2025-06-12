@@ -113,20 +113,22 @@ void get_setup(Vector<String> args,Command *command){
 
 void get_loop(Command *command){}
 
-void run_setup(Vector<String> args,Command *command){
+void run_setup(Vector<String> args,Command   *command){
       if(check_params("run()", 0, args.size())){
 	return;
       }
-      command->position_goal = Motion{
-	  (int16_t)args[5].toInt(),//angle_x
-	  (int16_t)args[4].toInt(),//angle_y
-	  (int16_t)args[3].toInt(),//angle_z
-	  (int16_t)args[2].toInt()//gripper
-      };
       mylog("running");
+      //TODO move to loop
+      disable_user_depositioning();
+      for(Motion i:motion_stack){
+	set_arm(i.angle_x, i.angle_y, i.angle_z);
+	gripper.write(i.gripper);
+      }
+
 }
 void run_loop(Command *command){
   mylog(".");
+  
 }
 
 void stop_setup(Vector<String> args,Command *command){
