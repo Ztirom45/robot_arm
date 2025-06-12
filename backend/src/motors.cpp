@@ -7,7 +7,6 @@ TODO fix depositioning
 #include "log.hpp"
 #include <motors.hpp>
 
-#define DEGREE_ACURACY 3
 
 void enable_user_depositioning(){ 
     mylogln((int)user_depositioning_enabled);
@@ -93,7 +92,13 @@ bool move_arm_angle(Motion goal,int speed){//return true if its done
     way_to_go.angle_x > speed ? speed : (way_to_go.angle_x < -speed ? -speed: way_to_go.angle_x),
     way_to_go.angle_y > speed ? speed : (way_to_go.angle_y < -speed ? -speed: way_to_go.angle_y),
     way_to_go.angle_z > speed ? speed : (way_to_go.angle_z < -speed ? -speed: way_to_go.angle_z),
-    way_to_go.gripper > speed ? speed : (way_to_go.gripper < -speed ? -speed: way_to_go.gripper)
+    180//way_to_go.gripper > speed ? speed : (way_to_go.gripper < -speed ? -speed: way_to_go.gripper)
+  };
+  Motion motion{
+    position.angle_x+step.angle_x,
+    position.angle_y+step.angle_y,
+    position.angle_z+step.angle_z,
+    position.gripper+step.gripper
   };
   mylog(position.angle_x);
   mylog(", ");
@@ -111,24 +116,33 @@ bool move_arm_angle(Motion goal,int speed){//return true if its done
   mylog(", ");
   mylog(step.angle_y);
   mylog(", ");
-  mylogln(step.angle_z);
-  
+  mylog(step.angle_z);
+  mylog(":\t");
+  mylog(motion.angle_x);
+  mylog(", ");
+  mylog(motion.angle_y);
+  mylog(", ");
+  mylogln(motion.angle_z);
+
   if(abs(step.angle_x)<min(DEGREE_ACURACY,speed)
   &&abs(step.angle_y)<min(DEGREE_ACURACY,speed)
   &&abs(step.angle_z)<min(DEGREE_ACURACY,speed)
-  &&abs(step.gripper)<min(DEGREE_ACURACY,speed)){
+  /*&&abs(step.gripper)<min(DEGREE_ACURACY,speed()*/){//implement gripper later if proper motor
     return true;
   }
-  set_arm_angle(position+step);
-  delay(50);
+  //set_arm_angle(position+step);
+  for(int i=0;i<10;i++){//hope to conter the buggy hardware wich couse random motion in wrong direction
+    set_arm_angle(motion);
+    delay(10);
+  }
   return false;
 }
-/*
+
 int FeedbackServo::read(){//conversion to voltage devided by PIv (at 180°) multiplied by 180°
                           //
     return analogRead(this->feedback_pin)/ 1023.0*5.0/PI*180.0;
 }
-*/
+
 FeedbackServo::FeedbackServo(int feedback_pin) : Servo(){
   this->feedback_pin = feedback_pin;
   pinMode(feedback_pin, INPUT);

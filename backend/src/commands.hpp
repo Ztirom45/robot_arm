@@ -13,7 +13,7 @@ TODO smartpointer
 #define MAX_COMMAND_LEN 50
 #define MAX_NUMBER_OF_MOTIONS 10
 #define COMMAND_COUNT 4
-#define ANGULAR_VELOCITY 10//°/50ms
+#define ANGULAR_VELOCITY 4//°/50ms
 
 struct Motion{
 	int16_t angle_x;

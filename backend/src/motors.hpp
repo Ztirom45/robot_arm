@@ -5,6 +5,9 @@
 #include <log.hpp>
 #include <commands.hpp>
 
+
+#define DEGREE_ACURACY 3
+
 void enable_user_depositioning();
 void disable_user_depositioning();
 void setup_motors();
@@ -16,7 +19,7 @@ bool move_arm_angle(Motion goal,int speed);
 
 struct FeedbackServo: public Servo{
 	int feedback_pin;
-	//int read();
+	int read();
 	FeedbackServo(int);
 };
 
