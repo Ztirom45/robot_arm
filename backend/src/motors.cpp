@@ -84,6 +84,13 @@ Motion get_arm_position(){
   return arm_position;
 }
 
+void set_arm_angle(Motion goal){
+  j1.write(goal.angle_x);
+  j2.write(goal.angle_y);
+  j3.write(goal.angle_z);
+  gripper.write(goal.gripper);
+}
+
 int FeedbackServo::read(){//conversion to voltage devided by PIv (at 180°) multiplied by 180°
                           //
     return analogRead(this->feedback_pin)/ 1023.0*5.0/PI*180.0;

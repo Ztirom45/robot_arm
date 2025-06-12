@@ -121,14 +121,12 @@ void run_setup(Vector<String> args,Command   *command){
       //TODO move to loop
       disable_user_depositioning();
       for(Motion i:motion_stack){
-	set_arm(i.angle_x, i.angle_y, i.angle_z);
-	gripper.write(i.gripper);
+	set_arm_angle(i);
 	delay(2000);
       }
 
 }
 void run_loop(Command *command){
-  mylog(".");
   
 }
 
