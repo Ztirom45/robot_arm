@@ -30,6 +30,8 @@ a robotic arm with fancy contoroll options
         - [x] max_len(motion_stak)
         - [ ] speed
 
+## - TODO add gripper feedback
+
 ### - TODO frontend ui for commands
 
 

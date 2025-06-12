@@ -33,7 +33,7 @@ void disable_user_depositioning(){
 
 void setup_motors(){
     disable_user_depositioning();
-    while(!move_arm_angle(Motion{90,90,90,180}, ANGULAR_VELOCITY)){};
+    while(!move_arm_angle(Motion{70,80,90,180}, ANGULAR_VELOCITY)){};
     enable_user_depositioning();
 
 }
