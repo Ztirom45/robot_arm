@@ -123,6 +123,7 @@ void run_setup(Vector<String> args,Command   *command){
       for(Motion i:motion_stack){
 	set_arm(i.angle_x, i.angle_y, i.angle_z);
 	gripper.write(i.gripper);
+	delay(2000);
       }
 
 }
