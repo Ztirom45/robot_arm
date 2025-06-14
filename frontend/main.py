@@ -8,12 +8,14 @@ class MyPanel(wx.Panel):
        
         self.number_of_motions = 0
 
+
         self.motions = wx.GridSizer(10, 5, 1, 1)     
         self.parrent_sizer.Add(self.motions, 10, 0, 0)
+        self.motions.Layout()
         
         my_sizer = wx.GridSizer(2, 5, 1, 1)     
         self.parrent_sizer.Add(my_sizer)
-
+        
         self.text_ctrl_j1 = wx.TextCtrl(self)
         self.text_ctrl_j2 = wx.TextCtrl(self)
         self.text_ctrl_j3 = wx.TextCtrl(self)
@@ -41,21 +43,35 @@ class MyPanel(wx.Panel):
         my_sizer.Add(run_button, 0, wx.ALL | wx.CENTER, 5)        
         my_sizer.Add(stop_button, 0, wx.ALL | wx.CENTER, 5)        
 
+
+        self.motions_array = [wx.StaticText(self, -1, "no motions are configured")]
+        self.motions.Add(self.motions_array[0], 0, wx.ALL, 5)
+
         self.SetSizer(self.parrent_sizer)        
     
     def update_motions(self):
+        #clear motions
         self.motions.Clear()
+        
+        for i in self.motions_array:
+            i.Destroy()
+        del(self.motions_array[:])
 
-        self.number_of_motions = 1
-        for i in range(1):
-            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
-            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
-            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
-            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
-            self.motions.Add(wx.Button(self, label="edit"), 0, wx.ALL, 5)         
+        print(len(self.motions_array))
 
-            self.motions.Layout()
-            self.parrent_sizer.Layout()
+        #parse new motions
+        for i in range(1):        
+            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
+            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
+            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
+            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
+            self.motions_array.append(wx.Button(self, label="edit"))         
+        
+        for i in self.motions_array:
+            self.motions.Add(i, 0, wx.ALL, 5)         
+        
+        self.motions.Layout()
+        self.parrent_sizer.Layout()
 
 
     def add_given_position(self, event):
@@ -83,12 +99,14 @@ class MyPanel(wx.Panel):
 class MyFrame(wx.Frame):    
     def __init__(self):
         super().__init__(parent=None, title='Robot arm controll')
-        self.panel = MyPanel(self)  
+        self.SetSize(1024,720)
+        self.panel = MyPanel(self)
         self.Show()
 
 if __name__ == '__main__':
     app = wx.App()
     frame = MyFrame()
+
     app.MainLoop()
 
 #arduino = serial.Serial("/dev/ttyUSB1",timeout=1, baudrate=9600)
