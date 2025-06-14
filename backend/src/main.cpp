@@ -21,7 +21,7 @@ String recived;
 void setup() {
     Serial.begin(9600);
     setup_motors();
-    mylogln("`ready`");
+    mylogln("ready");
 }
 
 String read_message(){
