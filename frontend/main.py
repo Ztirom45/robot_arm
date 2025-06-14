@@ -5,7 +5,9 @@ class MyPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)        
         self.parrent_sizer = wx.BoxSizer(wx.VERTICAL)
-        
+       
+        self.number_of_motions = 0
+
         self.motions = wx.GridSizer(10, 5, 1, 1)     
         self.parrent_sizer.Add(self.motions, 10, 0, 0)
         
@@ -17,22 +19,45 @@ class MyPanel(wx.Panel):
         self.text_ctrl_j3 = wx.TextCtrl(self)
         self.text_ctrl_gripper = wx.TextCtrl(self)
         
-        add_given_position_button = wx.Button(self, label='add current position')
+        add_given_position_button = wx.Button(self, label='add given position')
         add_given_position_button.Bind(wx.EVT_BUTTON, self.add_given_position)
         
+        add_current_position_button = wx.Button(self, label='add current position')
+        add_current_position_button.Bind(wx.EVT_BUTTON, self.add_current_position)
+       
+        run_button = wx.Button(self, label='run')
+        run_button.Bind(wx.EVT_BUTTON, self.run_motions)        
+
+        stop_button = wx.Button(self, label='stop')
+        stop_button.Bind(wx.EVT_BUTTON, self.run_motions)        
+
         my_sizer.Add(self.text_ctrl_j1, 0, wx.ALL, 5)        
         my_sizer.Add(self.text_ctrl_j2, 0, wx.ALL, 5)        
         my_sizer.Add(self.text_ctrl_j3, 0, wx.ALL, 5)        
         my_sizer.Add(self.text_ctrl_gripper, 0, wx.ALL, 5)        
-        
         my_sizer.Add(add_given_position_button, 0, wx.ALL | wx.CENTER, 5)        
-
-        add_current_position_button = wx.Button(self, label='add current position')
-        add_current_position_button.Bind(wx.EVT_BUTTON, self.add_current_position)
-        my_sizer.Add(add_current_position_button, 0, wx.ALL | wx.CENTER, 5)        
         
+        my_sizer.Add(add_current_position_button, 0, wx.ALL | wx.CENTER, 5)        
+        my_sizer.Add(run_button, 0, wx.ALL | wx.CENTER, 5)        
+        my_sizer.Add(stop_button, 0, wx.ALL | wx.CENTER, 5)        
+
         self.SetSizer(self.parrent_sizer)        
     
+    def update_motions(self):
+        self.motions.Clear()
+
+        self.number_of_motions = 1
+        for i in range(1):
+            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
+            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
+            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
+            self.motions.Add(wx.StaticText(self, -1, "<>"), 0, wx.ALL, 5)         
+            self.motions.Add(wx.Button(self, label="edit"), 0, wx.ALL, 5)         
+
+            self.motions.Layout()
+            self.parrent_sizer.Layout()
+
+
     def add_given_position(self, event):
         j1 = self.text_ctrl_j1.GetValue()
         j2 = self.text_ctrl_j2.GetValue()
@@ -42,17 +67,17 @@ class MyPanel(wx.Panel):
             print("You didn't enter anything in on textbox!")
             return
         print(f"add {j1} {j2} {j3} {gripper} 0 1".encode("utf-8"))
-        new_btn = wx.Button(self, label="test")
-        self.parrent_sizer.Add(new_btn, 0, wx.ALL, 5)         
-        #self.motions.Layout()
-        self.parrent_sizer.Layout()
+        self.update_motions()
 
     def add_current_position(self, event):
         print(b"add 0 0 0 0 0 2")
-        new_btn = wx.Button(self, label="test")
-        self.motions.Add(new_btn, 0, wx.ALL, 5)         
-        self.motions.Layout()
-        self.parrent_sizer.Layout()
+        self.update_motions()
+    
+    def run_motions(self,event):
+        print(b"run")
+    
+    def stop_motions(self,event):
+        print(b"stop")
 
 
 class MyFrame(wx.Frame):    
