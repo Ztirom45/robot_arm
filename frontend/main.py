@@ -1,16 +1,21 @@
 import wx
 import serial
 
+COMMAND_COUNT = 10
+
 class MyPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)        
+        
+        self.edit_row_functions = [lambda event:self.edit_row(event,row) for row in range(COMMAND_COUNT-1,-1,-1)]
+
         self.parrent_sizer = wx.BoxSizer(wx.VERTICAL)
        
         self.number_of_motions = 0
 
 
-        self.motions = wx.GridSizer(10, 5, 1, 1)     
-        self.parrent_sizer.Add(self.motions, 10, 0, 0)
+        self.motions = wx.GridSizer(COMMAND_COUNT, 5, 1, 1)     
+        self.parrent_sizer.Add(self.motions, COMMAND_COUNT, 0, 0)
         self.motions.Layout()
         
         my_sizer = wx.GridSizer(2, 5, 1, 1)     
@@ -47,7 +52,8 @@ class MyPanel(wx.Panel):
         self.motions_array = [wx.StaticText(self, -1, "no motions are configured")]
         self.motions.Add(self.motions_array[0], 0, wx.ALL, 5)
 
-        self.SetSizer(self.parrent_sizer)        
+        self.SetSizer(self.parrent_sizer)
+
     
     def update_motions(self):
         #clear motions
@@ -65,7 +71,9 @@ class MyPanel(wx.Panel):
             self.motions_array.append(wx.StaticText(self, -1, "<>"))         
             self.motions_array.append(wx.StaticText(self, -1, "<>"))         
             self.motions_array.append(wx.StaticText(self, -1, "<>"))         
-            self.motions_array.append(wx.Button(self, label="edit"))         
+            bnt = wx.Button(self, label="edit")
+            bnt.Bind(wx.EVT_BUTTON, self.edit_row_functions[i])
+            self.motions_array.append(bnt)
         
         for i in self.motions_array:
             self.motions.Add(i, 0, wx.ALL, 5)         
@@ -94,7 +102,9 @@ class MyPanel(wx.Panel):
     
     def stop_motions(self,event):
         print(b"stop")
-
+    
+    def edit_row(self,event,row):
+        print(row)
 
 class MyFrame(wx.Frame):    
     def __init__(self):
