@@ -6,7 +6,8 @@ import serial
 class MyFrame(wx.Frame):    
     def __init__(self):
         super().__init__(parent=None, title='Robot arm controll')
-        panel = wx.Panel(self)        
+        panel = wx.Panel(self)         
+        self.motions = wx.GridSizer(10, 5, 1, 1)     
         my_sizer = wx.GridSizer(2, 5, 1, 1)     
         
         self.text_ctrl_j1 = wx.TextCtrl(panel)
@@ -30,13 +31,14 @@ class MyFrame(wx.Frame):
         
         panel.SetSizer(my_sizer)        
         self.Show()
+    
     def add_given_position(self, event):
         j1 = self.text_ctrl_j1.GetValue()
         j2 = self.text_ctrl_j2.GetValue()
         j3 = self.text_ctrl_j3.GetValue()
         gripper = self.text_ctrl_gripper.GetValue()
         if not j1 or not j2 or not j3 or not gripper:
-            print("You didn't enter anything in on feald!")
+            print("You didn't enter anything in on textbox!")
         else:
             print(f"add {j1} {j2} {j3} {gripper} 0 1".encode("utf-8"))
 
