@@ -33,7 +33,6 @@ a robotic arm with fancy contoroll options
 ## - TODO add gripper feedback
 
 ### - WORK IN PROGRESS frontend ui for commands
-    - if the frontend dosn't work try [this](https://stackoverflow.com/questions/3738173/why-does-pyusb-libusb-require-root-sudo-permissions-on-linux)
 
 ## Hardware:
 - basic 9g servos like the SG92R
