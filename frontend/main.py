@@ -53,7 +53,14 @@ class MyPanel(wx.Panel):
         self.motions.Add(self.motions_array[0], 0, wx.ALL, 5)
 
         self.SetSizer(self.parrent_sizer)
-
+        
+        self.robot_arm = serial.Serial("/dev/ttyUSB2",timeout=1, baudrate=9600)
+        #wait until robot arm is ready
+        while True: 
+            read_data = self.robot_arm.readline().decode("utf-8")
+            if(read_data != ""):
+                print(read_data)
+                if "ready" in read_data: break
     
     def update_motions(self):
         #clear motions
@@ -63,18 +70,22 @@ class MyPanel(wx.Panel):
             i.Destroy()
         del(self.motions_array[:])
 
-        print(len(self.motions_array))
-
         #parse new motions
-        for i in range(1):        
-            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
-            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
-            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
-            self.motions_array.append(wx.StaticText(self, -1, "<>"))         
-            bnt = wx.Button(self, label="edit")
-            bnt.Bind(wx.EVT_BUTTON, self.edit_row_functions[i])
-            self.motions_array.append(bnt)
-        
+        self.robot_arm.write(b"get")
+        while True:
+            read_data = self.robot_arm.readline().decode("utf-8")
+            if "`" in read_data:
+                motions_strings = read_data[read_data.find("`")+1:read_data.find("(")-1].split(";")   
+                for i,motion in enumerate(motions_strings):
+                    for angle in motion.split(","):
+                        self.motions_array.append(wx.StaticText(self, -1, angle))         
+                    bnt = wx.Button(self, label="edit")
+                    bnt.Bind(wx.EVT_BUTTON, self.edit_row_functions[i])
+                    self.motions_array.append(bnt)
+
+                break
+
+
         for i in self.motions_array:
             self.motions.Add(i, 0, wx.ALL, 5)         
         
@@ -90,21 +101,34 @@ class MyPanel(wx.Panel):
         if not j1 or not j2 or not j3 or not gripper:
             print("You didn't enter anything in on textbox!")
             return
-        print(f"add {j1} {j2} {j3} {gripper} 0 1".encode("utf-8"))
+        self.send_command(f"add {j1} {j2} {j3} {gripper} 0 1".encode("utf-8"))
         self.update_motions()
 
     def add_current_position(self, event):
-        print(b"add 0 0 0 0 0 2")
+        self.send_command(b"add 0 0 0 0 0 2")
         self.update_motions()
     
     def run_motions(self,event):
-        print(b"run")
+        self.send_command(b"run")
     
     def stop_motions(self,event):
-        print(b"stop")
+        self.send_command(b"stop")
     
-    def edit_row(self,event,row):
+    def edit_row(self,event,row):# Work in Progress
         print(row)
+
+    def send_command(self,cmd:bytes):
+        self.robot_arm.write(cmd)
+        print(cmd)
+        while True:
+            read_data = self.robot_arm.readline().decode("utf-8")
+            if read_data != "":
+                print(read_data)
+                return
+
+    def __del__(self):
+        self.robot_arm.close()
+        super().Destroy()
 
 class MyFrame(wx.Frame):    
     def __init__(self):
@@ -119,19 +143,7 @@ if __name__ == '__main__':
 
     app.MainLoop()
 
-#arduino = serial.Serial("/dev/ttyUSB1",timeout=1, baudrate=9600)
 
-# wait until robot arm is ready
-#while True: 
-#    read_data = arduino.readline().decode("utf-8")
-#    if(read_data != ""):
-#        print(read_data)
-#        if "ready" in read_data: break
 
 #arduino.write(b"add 20 20 30 40 0 2")
-#while True: 
-#    read_data = arduino.readline().decode("utf-8")
-#    if(read_data != ""):
-#        print(read_data)
-#
-#arduino.close()
+
