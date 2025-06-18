@@ -13,10 +13,6 @@ class MyPanel(wx.Panel):
         # makes sure, that only one row is edited at the time and that only not edit mode ui can execute run
         self.edit_mode = False
         
-        self.edit_row_functions = [lambda event,row=i: self.edit_row(event,row) for i in range(COMMAND_COUNT)]
-        self.replace_current_position_functions = [lambda event,row=i: self.replace_current_position(event,row) for i in range(COMMAND_COUNT)]
-        self.replace_given_position_functions = [lambda event,row=i: self.replace_given_position(event,row) for i in range(COMMAND_COUNT)]
-        self.delete_row_functions = [lambda event,row=i: self.delete_row(event,row) for i in range(COMMAND_COUNT)]
         
         self.parrent_sizer = wx.BoxSizer(wx.VERTICAL)
        
@@ -91,11 +87,11 @@ class MyPanel(wx.Panel):
                    
                     bnt_edit = wx.Button(self, label="edit")
                     
-                    bnt_edit.Bind(wx.EVT_BUTTON, self.edit_row_functions[i])
+                    bnt_edit.Bind(wx.EVT_BUTTON, self.generate_button_function_row_specific(self.edit_row,i))
                     self.motions_array.append(bnt_edit)
                     
                     bnt_delete = wx.Button(self, label="delete")
-                    bnt_delete.Bind(wx.EVT_BUTTON, self.delete_row_functions[i])
+                    bnt_delete.Bind(wx.EVT_BUTTON, self.generate_button_function_row_specific(self.delete_row,i))
                     self.motions_array.append(bnt_delete)
 
                 break
@@ -146,11 +142,11 @@ class MyPanel(wx.Panel):
         
         self.motions_array[index+4].Destroy()
         self.motions_array[index+4] = wx.Button(self,label="current position")
-        self.motions_array[index+4].Bind(wx.EVT_BUTTON, self.replace_current_position_functions[row])
+        self.motions_array[index+4].Bind(wx.EVT_BUTTON, self.generate_button_function_row_specific(self.replace_current_position,row))
 
         self.motions_array[index+5].Destroy()
         self.motions_array[index+5] = wx.Button(self,label="done")
-        self.motions_array[index+5].Bind(wx.EVT_BUTTON, self.replace_given_position_functions[row])
+        self.motions_array[index+5].Bind(wx.EVT_BUTTON, self.generate_button_function_row_specific(self.replace_given_position,row))
 
 
         for i in self.motions_array:
@@ -184,6 +180,8 @@ class MyPanel(wx.Panel):
          self.send_command(f"add {j1} {j2} {j3} {gripper} {row} 0".encode())
          self.update_motions()
 
+    def generate_button_function_row_specific(self,fn,row:int):
+        return lambda event,row=row:fn(event,row)
     def send_command(self,cmd:bytes):
         self.robot_arm.write(cmd)
         print(cmd)

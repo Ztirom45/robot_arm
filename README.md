@@ -32,7 +32,7 @@ a robotic arm with fancy contoroll options
 
 ## - TODO add gripper feedback
 
-### - WORK IN PROGRESS frontend ui for commands
+### - frontend ui for commands
 
 ## Hardware:
 - basic 9g servos like the SG92R
