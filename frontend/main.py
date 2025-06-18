@@ -14,7 +14,7 @@ class MyPanel(wx.Panel):
         self.number_of_motions = 0
 
 
-        self.motions = wx.GridSizer(COMMAND_COUNT, 5, 1, 1)     
+        self.motions = wx.GridSizer(COMMAND_COUNT, 6, 1, 1)     
         self.parrent_sizer.Add(self.motions, COMMAND_COUNT, 0, 0)
         self.motions.Layout()
         
@@ -36,7 +36,7 @@ class MyPanel(wx.Panel):
         run_button.Bind(wx.EVT_BUTTON, self.run_motions)        
 
         stop_button = wx.Button(self, label='stop')
-        stop_button.Bind(wx.EVT_BUTTON, self.run_motions)        
+        stop_button.Bind(wx.EVT_BUTTON, self.stop_motions)        
 
         my_sizer.Add(self.text_ctrl_j1, 0, wx.ALL, 5)        
         my_sizer.Add(self.text_ctrl_j2, 0, wx.ALL, 5)        
@@ -54,7 +54,7 @@ class MyPanel(wx.Panel):
 
         self.SetSizer(self.parrent_sizer)
         
-        self.robot_arm = serial.Serial("/dev/ttyUSB2",timeout=1, baudrate=9600)
+        self.robot_arm = serial.Serial("/dev/ttyUSB0",timeout=1, baudrate=9600)
         #wait until robot arm is ready
         while True: 
             read_data = self.robot_arm.readline().decode("utf-8")
@@ -79,10 +79,14 @@ class MyPanel(wx.Panel):
                 for i,motion in enumerate(motions_strings):
                     for angle in motion.split(","):
                         self.motions_array.append(wx.StaticText(self, -1, angle))         
-                    bnt = wx.Button(self, label="edit")
-                    bnt.Bind(wx.EVT_BUTTON, self.edit_row_functions[i])
-                    self.motions_array.append(bnt)
-
+                    
+                    bnt_edit = wx.Button(self, label="edit")
+                    bnt_edit.Bind(wx.EVT_BUTTON, self.edit_row_functions[i])
+                    self.motions_array.append(bnt_edit)
+                    
+                    bnt_delete = wx.Button(self, label="delete")
+                    bnt_delete.Bind(wx.EVT_BUTTON, self.delete_row)
+                    self.motions_array.append(bnt_delete)
                 break
 
 
@@ -116,6 +120,18 @@ class MyPanel(wx.Panel):
     
     def edit_row(self,event,row):# Work in Progress
         print(row)
+
+        #clear motions
+        self.motions.Clear()
+        
+        for i in self.motions_array:
+            self.motions.Add(i, 0, wx.ALL, 5)         
+        
+        self.motions.Layout()
+        self.parrent_sizer.Layout()
+
+    def delete_row(self,event):
+        print("delete")
 
     def send_command(self,cmd:bytes):
         self.robot_arm.write(cmd)
