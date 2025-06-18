@@ -16,6 +16,7 @@ class MyPanel(wx.Panel):
         self.edit_row_functions = [lambda event,row=i: self.edit_row(event,row) for i in range(COMMAND_COUNT)]
         self.replace_current_position_functions = [lambda event,row=i: self.replace_current_position(event,row) for i in range(COMMAND_COUNT)]
         self.replace_given_position_functions = [lambda event,row=i: self.replace_given_position(event,row) for i in range(COMMAND_COUNT)]
+        self.delete_row_functions = [lambda event,row=i: self.delete_row(event,row) for i in range(COMMAND_COUNT)]
         
         self.parrent_sizer = wx.BoxSizer(wx.VERTICAL)
        
@@ -94,7 +95,7 @@ class MyPanel(wx.Panel):
                     self.motions_array.append(bnt_edit)
                     
                     bnt_delete = wx.Button(self, label="delete")
-                    bnt_delete.Bind(wx.EVT_BUTTON, self.delete_row)
+                    bnt_delete.Bind(wx.EVT_BUTTON, self.delete_row_functions[i])
                     self.motions_array.append(bnt_delete)
 
                 break
@@ -158,11 +159,11 @@ class MyPanel(wx.Panel):
         self.motions.Layout()
         self.parrent_sizer.Layout()
         
-    def delete_row(self,event):
-        print("delete")
-    
+    def delete_row(self,event,row):
+        self.send_command(f"add 0 0 0 0 {row} 4".encode())
+        self.update_motions()
+     
     def replace_current_position(self,event,row):
-        self.motions.Clear()
         self.send_command(f"add 0 0 0 0 {row} 3".encode())
         self.update_motions()
 
