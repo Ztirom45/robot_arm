@@ -108,10 +108,14 @@ class MyPanel(wx.Panel):
 
 
     def add_given_position(self, event):
-        j1 = self.text_ctrl_j1.GetValue()
-        j2 = self.text_ctrl_j2.GetValue()
-        j3 = self.text_ctrl_j3.GetValue()
-        gripper = self.text_ctrl_gripper.GetValue()
+        try:
+             j1 = str(int(self.text_ctrl_j1.GetValue()))
+             j2 = str(int(self.text_ctrl_j2.GetValue()))
+             j3 = str(int(self.text_ctrl_j3.GetValue()))
+             gripper = str(int(self.text_ctrl_gripper.GetValue()))
+        except:
+             print("these are not valid ints")
+             return;
         if not j1 or not j2 or not j3 or not gripper:
             print("You didn't enter anything in on textbox!")
             return
@@ -158,10 +162,26 @@ class MyPanel(wx.Panel):
         print("delete")
     
     def replace_current_position(self,event,row):
-        print(row)
+        self.motions.Clear()
+        self.send_command(f"add 0 0 0 0 {row} 3".encode())
+        self.update_motions()
 
     def replace_given_position(self,event,row):
-        print(row)
+         index = row*ELEMENTS_IN_A_ROW_MOTION_GRID
+         try:
+             j1 = str(int(self.motions_array[index+0].GetValue()))
+             j2 = str(int(self.motions_array[index+1].GetValue()))
+             j3 = str(int(self.motions_array[index+2].GetValue()))
+             gripper = str(int(self.motions_array[index+3].GetValue()))
+         except:
+             print("these are not valid ints")
+             return;
+         if not j1 or not j2 or not j3 or not gripper:
+            print("You didn't enter anything in on textbox!")
+            return
+
+         self.send_command(f"add {j1} {j2} {j3} {gripper} {row} 0".encode())
+         self.update_motions()
 
     def send_command(self,cmd:bytes):
         self.robot_arm.write(cmd)
