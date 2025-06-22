@@ -132,6 +132,7 @@ void get_setup(Vector<String> args,Command *command){
 
 void get_loop(Command *command){}
 
+static int motion_stack_index = 0;
 void run_setup(Vector<String> args,Command   *command){
       if(check_params("run()", 0, args.size())){
 	return;
@@ -140,20 +141,24 @@ void run_setup(Vector<String> args,Command   *command){
       //TODO move to loop
       disable_user_depositioning();
       for(Motion motion:motion_stack){
-	while(!move_arm_angle(motion, ANGULAR_VELOCITY)){
-	}
-	delay(500);
       }
 
 }
 void run_loop(Command *command){
-  
+  if(move_arm_angle(motion_stack[motion_stack_index], ANGULAR_VELOCITY)){
+    motion_stack_index+=1;
+    if(motion_stack_index>=motion_stack.size()){
+      motion_stack_index=0;
+    }
+  }
+  delay(300);
 }
 
 void stop_setup(Vector<String> args,Command *command){
       if(check_params("stop()", 0, args.size())){
 	return;
       }
+      enable_user_depositioning();
 }
 
 void stop_loop(Command *command){}

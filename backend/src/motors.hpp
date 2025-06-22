@@ -6,7 +6,7 @@
 #include <commands.hpp>
 
 
-#define DEGREE_ACURACY 3
+#define DEGREE_ACURACY 4
 
 void enable_user_depositioning();
 void disable_user_depositioning();

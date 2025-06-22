@@ -19,9 +19,9 @@ a robotic arm with fancy contoroll options
     - [x] action == 2: add current robotic arm position at the top of the stack (does not work with the harware)
     - [x] action == 3: replace current robotic arm position at given position argument of stack (does not work with the harware)
     - [x] action == 4: remove element positon from motion_stack
-- [ ] run()
+- [x] run()
     - executes motion_stack from motion_stack[0] to motions_stack[n]
-- [ ] stop()
+- [x] stop()
     - breacks run()
 - [x] get()
     - returns:
