@@ -151,7 +151,7 @@ void run_loop(Command *command){
       motion_stack_index=0;
     }
   }
-  delay(300);
+  delay(400);
 }
 
 void stop_setup(Vector<String> args,Command *command){

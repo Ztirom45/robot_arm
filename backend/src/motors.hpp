@@ -20,6 +20,8 @@ bool move_arm_angle(Motion goal,int speed);
 struct FeedbackServo: public Servo{
 	int feedback_pin;
 	int read();
+	float factor_analogRead;//analogRead*factor_analogRead = angle_in_degree
+	void calibration();
 	FeedbackServo(int);
 };
 

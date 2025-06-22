@@ -33,6 +33,9 @@ void disable_user_depositioning(){
 
 void setup_motors(){
     disable_user_depositioning();
+    j1.calibration();
+    j2.calibration();
+    j3.calibration();
     while(!move_arm_angle(Motion{70,80,90,180}, ANGULAR_VELOCITY)){};
     enable_user_depositioning();
 
@@ -140,12 +143,26 @@ bool move_arm_angle(Motion goal,int speed){//return true if its done
 
 int FeedbackServo::read(){//conversion to voltage devided by PIv (at 180°) multiplied by 180°
                           //
-    return analogRead(this->feedback_pin)/ 1023.0*5.0/PI*180.0;
+    return analogRead(this->feedback_pin)*this->factor_analogRead;
 }
+
 
 FeedbackServo::FeedbackServo(int feedback_pin) : Servo(){
   this->feedback_pin = feedback_pin;
+  this->factor_analogRead = 180.0*5.0/1023.0/PI;
   pinMode(feedback_pin, INPUT);
+}
+
+void FeedbackServo::calibration(){
+  
+  this->write(90);
+  delay(2000);
+  mylog("voltage 90°: ");
+  float voltage_value = analogRead(this->feedback_pin);
+  this->factor_analogRead = 90/voltage_value;
+  mylogln((float)(voltage_value/1023.0*5.0));
+  
+  //angle = value*180.0*5.0/1023.0/PI
 }
 
 
