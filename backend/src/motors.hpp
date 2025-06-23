@@ -21,6 +21,7 @@ struct FeedbackServo: public Servo{
 	int feedback_pin;
 	int read();
 	float factor_analogRead;//analogRead*factor_analogRead = angle_in_degree
+	int zero_degreeanalogRead;//
 	void calibration();
 	FeedbackServo(int);
 };

@@ -143,26 +143,29 @@ bool move_arm_angle(Motion goal,int speed){//return true if its done
 
 int FeedbackServo::read(){//conversion to voltage devided by PIv (at 180°) multiplied by 180°
                           //
-    return analogRead(this->feedback_pin)*this->factor_analogRead;
+    return (analogRead(this->feedback_pin)-this->zero_degreeanalogRead)*this->factor_analogRead;
 }
 
 
 FeedbackServo::FeedbackServo(int feedback_pin) : Servo(){
   this->feedback_pin = feedback_pin;
   this->factor_analogRead = 180.0*5.0/1023.0/PI;
+  this->zero_degreeanalogRead = 30;
   pinMode(feedback_pin, INPUT);
 }
 
 void FeedbackServo::calibration(){
-  
+  this->write(0);
+  delay(5000);
+  float voltage_value = analogRead(this->feedback_pin); 
+  this->zero_degreeanalogRead = voltage_value;
   this->write(90);
-  delay(2000);
-  mylog("voltage 90°: ");
-  float voltage_value = analogRead(this->feedback_pin);
-  this->factor_analogRead = 90/voltage_value;
+  delay(5000);
+ 
+  voltage_value = analogRead(this->feedback_pin);
+  this->factor_analogRead = 90/(voltage_value-this->zero_degreeanalogRead);
   mylogln((float)(voltage_value/1023.0*5.0));
   
-  //angle = value*180.0*5.0/1023.0/PI
 }
 
 
