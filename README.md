@@ -11,8 +11,15 @@ a robotic arm with fancy contoroll options
     - it could take a while for the UI to load because it wait, until calibration is done
     - maybe you need to manualy reset the robot arm via a reset button
 
+## Fearures
+- setting position via hand and adding it to an instruction chain, that can be played
+- ⚙️inverse kinematics (implemented, but not used)
+- 🔧controll via command system over USB
+- 🖥️frontend to controll the arm
+<img src="https://github.com/Ztirom45/robot_arm/blob/main/rsc/ui.png"/>
 
-## features
+
+## Documentation
 ### - inverse cinematics postion setting
 
 ### - save postions and move to them:
@@ -41,12 +48,10 @@ a robotic arm with fancy contoroll options
         - [x] max_len(motion_stak)
 
 
-### - frontend ui for commands
-
-### - TODO add gripper feedback and implement proper contoroll
+### - TODO: add gripper feedback and implement proper contoroll
 
 ## Hardware:
 - basic 9g servos like the SG92R
-- The Servos are moded to read position as it can be seen here:
+- The Servos are moded to read position, as it can be seen here:
     - https://www.youtube.com/watch?v=S7aVcis3ntk
     - https://www.instructables.com/Servo-Feedback-Hack-free/
