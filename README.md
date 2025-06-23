@@ -1,7 +1,7 @@
 # robot_arm
 a robotic arm with fancy contoroll options
 
-<img src="https://github.com/Ztirom45/robot_arm/blob/main/img/arm.png"/>
+<img src="https://github.com/Ztirom45/robot_arm/blob/main/rsc/arm.jpg"/>
 
 
 ## usage
