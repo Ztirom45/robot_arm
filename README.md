@@ -1,6 +1,17 @@
 # robot_arm
 a robotic arm with fancy contoroll options
 
+<img src="https://github.com/Ztirom45/robot_arm/blob/main/img/arm.png"/>
+
+
+## usage
+- uplode the code by: `make` in backend directory
+- run fronend: `python3 main.py` in frondend directory
+    - make sure to install `wxpython` and `serial`
+    - it could take a while for the UI to load because it wait, until calibration is done
+    - maybe you need to manualy reset the robot arm via a reset button
+
+
 ## features
 ### - inverse cinematics postion setting
 
