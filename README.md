@@ -15,7 +15,7 @@ a robotic arm with fancy control options
 - setting position via hand and adding them to an instruction chain, that can be played
 - ⚙️inverse kinematics (implemented, but not used)
 - 🔧control via command system over USB
-- 🝚lego compatible
+- 🝚 lego compatible
 - 🖥️frontend UI:
 <img src="https://github.com/Ztirom45/robot_arm/blob/main/rsc/ui.png"/>
 
