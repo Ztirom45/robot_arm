@@ -40,9 +40,10 @@ a robotic arm with fancy contoroll options
         - [x] len(motion_stack)
         - [x] max_len(motion_stak)
 
-## - TODO add gripper feedback
 
 ### - frontend ui for commands
+
+### - TODO add gripper feedback and implement proper contoroll
 
 ## Hardware:
 - basic 9g servos like the SG92R
