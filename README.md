@@ -47,7 +47,7 @@ a robotic arm with fancy control options
         - [x] max_len(motion_stak)
 
 
-### - TODO: add gripper feedback and implement proper control
+### - TODO: add gripper feedback and implement proper gripper control
 
 ## Hardware:
 - basic 9g servos like the SG92R
