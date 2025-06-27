@@ -95,7 +95,7 @@ bool move_arm_angle(Motion goal,int speed){//return true if its done
     way_to_go.angle_x > speed ? speed : (way_to_go.angle_x < -speed ? -speed: way_to_go.angle_x),
     way_to_go.angle_y > speed ? speed : (way_to_go.angle_y < -speed ? -speed: way_to_go.angle_y),
     way_to_go.angle_z > speed ? speed : (way_to_go.angle_z < -speed ? -speed: way_to_go.angle_z),
-    180//way_to_go.gripper > speed ? speed : (way_to_go.gripper < -speed ? -speed: way_to_go.gripper)
+    goal.gripper
   };
   Motion motion{
     position.angle_x+step.angle_x,
